@@ -2,6 +2,9 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
 
+#- name: Dependency install
+#  shell: sudo apt-get install git-core zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev software-properties-common libffi-dev nodejs yarn
+
 - name: Define ruby_packages.
   set_fact:
     ruby_packages: "{{ __ruby_packages }}"
@@ -17,6 +20,29 @@
   when:
     - not ruby_install_from_source
     - ansible_os_family == 'Debian'
+#- name: Ensure apt-transport-https is installed
+#  apt:
+#    name: apt-transport-https
+
+#- name: Add Yarn apt key
+#  apt_key:
+#    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+
+#- name: Add Yarn repository
+#  apt_repository:
+#    repo: "deb https://dl.yarnpkg.com/debian/ stable main"
+#    filename: yarn
+
+#- name: Install Yarn
+#  apt:
+#    name: yarn
+
+
+#- name: Latest version of Ruby is installed
+#  apt: pkg={{ item }} state=latest
+#  with_items:
+#    - ruby-dev
+#    - sqlite3
 
 # Install ruby from source when ruby_install_from_source is true.
 - include_tasks: install-from-source.yml
@@ -42,3 +68,19 @@
   become: true
   become_user: "{{ ruby_install_gems_user }}"
   with_items: "{{ ruby_install_gems }}"
+
+  #- copy: src=gemrc dest=/etc/gemrc
+
+- command: gem install bundler
+           creates=/usr/local/bin/bundle
+
+- name: rails installation
+  shell: gem install rails
+           #- name: Install Rails dependencies
+           #  apt: pkg={{ item }} state=present
+           #  with_items: rails_dependencies   
+#- name: bundle installation
+#  args:
+#    chdir: /ror/
+    #  command: chdir=/root/ror/ 
+    #  shell: bundle install

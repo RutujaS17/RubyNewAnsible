@@ -15,3 +15,12 @@ __ruby_build_packages:
   - libncurses5-dev
   - libffi-dev
   - libgdbm-dev
+  - git-core
+  - libsqlite3-dev
+  - sqlite3 
+  - libxml2-dev
+  - libxslt1-dev
+  - libcurl4-openssl-dev
+  - software-properties-common 
+  - nodejs 
+  - yarn
